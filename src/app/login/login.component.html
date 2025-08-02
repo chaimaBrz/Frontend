@@ -1,0 +1,27 @@
+<div class="login-card">
+  <form [formGroup]="loginForm" (ngSubmit)="login()">
+    <h4>Login</h4>
+
+    <label>Email Address</label>
+    <input type="email" formControlName="email" placeholder="app@yourmail.com" />
+    <div *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['required']" class="error">
+      Email is required
+    </div>
+    <div *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['email']" class="error">
+      Invalid Email
+    </div>
+
+    <label>Password</label>
+    <input [type]="show ? 'text' : 'password'" formControlName="password" placeholder="********" />
+    <button type="button" (click)="showPassword()">Show/Hide</button>
+    <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']" class="error">
+      Password is required
+    </div>
+
+    <button type="submit" [disabled]="loginForm.invalid">Sign In</button>
+
+    <div *ngIf="errorMessage" class="error">
+      {{ errorMessage }}
+    </div>
+  </form>
+</div>

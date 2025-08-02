@@ -1,0 +1,33 @@
+<nav class="navbar navbar-light bg-light px-3">
+  <a class="navbar-brand">Navbar</a>
+  <div class="text-right">
+    <button class="btn btn-primary">test</button>
+  </div>
+</nav>
+
+<div class="content p-4">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nom</th>
+        <th scope="col">Modèle</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of equipments; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ item.nom }}</td>
+        <td>{{ item.modele }}</td>
+        <td>
+          <button class="btn btn-sm btn-info" (click)="openModal(item)">Historique</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="equipments?.length === 0" class="alert alert-warning mt-3">
+    Aucun équipement trouvé.
+  </div>
+</div>

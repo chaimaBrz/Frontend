@@ -1,0 +1,48 @@
+<app-breadcrumb [title]="'Equipements list'" [items]="['Réseau']" [active_item]="'Equipement Page'"></app-breadcrumb>
+<div class="container-fluid list-products">
+  <div class="row">
+    <!-- Individual column searching (text inputs) Starts-->
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header pb-0">
+          
+        </div>
+        <div class="card-body">
+          <div class="table-responsive product-table">
+              <table class="display dataTables_wrapper no-footer table" id="basic-1">
+                <thead>
+                  <tr>
+                    <th class="sorting_asc" scope="col">Id</th>
+                    <th class="sorting_asc" scope="col">Nom</th>
+                    <th class="sorting_asc" scope="col">Etat</th>
+                    <th class="sorting_asc" scope="col">Dateinstallation</th>
+                    <th class="sorting_asc" scope="col">Type</th>
+                     <th class="sorting_asc" scope="col">Fournisseur</th>     
+                    <!-- <th class="sorting_asc" scope="col" sortable="productImg" (sort)="onSort($event)">Image</th> -->
+                    <!-- <th class="sorting_asc" scope="col" sortable="productName" (sort)="onSort($event)">Details</th>
+                   <th class="sorting_asc" scope="col" sortable="amount" (sort)="onSort($event)">Amount</th>
+                   <th class="sorting_asc" scope="col" sortable="stock" (sort)="onSort($event)">Stock</th>
+                   <th class="sorting_asc" scope="col" sortable="startData" (sort)="onSort($event)">Start date</th> -->
+                    <th class="sorting_asc" scope="col">Alerte</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (item of list; track $index) {
+                  <tr class="odd">
+                    <td class="sorting_1">{{item.id}}</td>
+                    <td class="sorting_1">{{item.nom}}</td>
+                    <td class="sorting_1">{{item.etat}}</td>
+                    <td class="sorting_1">{{item.date_installation}}</td>
+                    <td class="sorting_1">{{item.type_nom}}</td>
+                    <td class="sorting_1">{{item.fournisseur_id}}</td>
+                    <td class="sorting_1">{{item.alerts}}</td>
+                  </tr>
+                  }
+                </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

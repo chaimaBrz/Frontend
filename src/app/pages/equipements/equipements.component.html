@@ -1,0 +1,16 @@
+<p>equipements works!</p>
+<div class="container">
+  <h2>Équipements Réseau</h2>
+  <div *ngIf="equipements.length === 0">Aucun équipement trouvé.</div>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+    <div *ngFor="let equipement of equipements" class="p-4 rounded-xl shadow-md bg-white">
+      <h4 class="font-bold">{{ equipement.nom }}</h4>
+      <p>Type : {{ equipement.type }}</p>
+      <p>IP : {{ equipement.ip }}</p>
+      <p [ngClass]="{'text-green-500': equipement.etat === 'online', 'text-red-500': equipement.etat === 'offline'}">
+        État : {{ equipement.etat }}
+      </p>
+    </div>
+  </div>
+</div>
