@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(email, password).subscribe({
       next: (res) => {
         this.authService.saveToken(JSON.stringify(res));
-        this.router.navigate(['/dashboard/']);
+        this.router.navigate(['//e-commerce/product-list']);
       },
       error: () => {
         this.errorMessage = 'Email ou mot de passe incorrect';

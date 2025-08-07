@@ -1,50 +1,67 @@
-import { AsyncPipe, CommonModule, DecimalPipe } from '@angular/common';
-import { Component, QueryList, ViewChildren } from '@angular/core';
-import { Observable } from 'rxjs';
-
+import { Component, OnInit } from '@angular/core';
+import { ApiService } from '../../../services/api.service';
+import { TicketService } from '../../../services/ticket.service';
+import { AlertService } from '../../../services/alert.service';
 import { FormsModule } from '@angular/forms';
-import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
-import { BreadcrumbComponent } from '../../../shared/components/breadcrumb/breadcrumb.component';
-import { FeatherIconComponent } from '../../../shared/components/feather-icon/feather-icon.component';
-import { OrderHistoryDirective, SortEvent } from '../../../shared/directive/order-history.directive';
-import { orderHistory } from '../../../shared/interface/order';
-import { OrderHistoryService } from '../../../shared/services/product/order-history.service';
-
+import { NgIf, NgFor } from '@angular/common';
 
 @Component({
-    selector: 'app-order-history',
-    templateUrl: './order-history.component.html',
-    styleUrls: ['./order-history.component.scss'],
-    imports: [BreadcrumbComponent, FormsModule,
-        OrderHistoryDirective, CommonModule,
-        FeatherIconComponent, NgbPagination, AsyncPipe],
-    providers: [DecimalPipe, OrderHistoryService]
+  selector: 'app-order-history',
+  templateUrl: './order-history.component.html',
+  styleUrls: ['./order-history.component.scss'],
+  standalone: true,
+  imports: [FormsModule, NgIf, NgFor]  // <-- Important : FormsModule pour ngModel, NgIf/NgFor pour directives
 })
+export class OrderHistoryComponent implements OnInit {
+  equipements: any[] = [];
+  newAlert: { [key: number]: string } = {};
 
-export class OrderHistoryComponent{
+  constructor(
+    private apiService: ApiService,
+    private ticketService: TicketService,
+    private alertService: AlertService
+  ) {}
 
-  orders$: Observable<orderHistory[]>;
-  total$: Observable<number>;
-
-  @ViewChildren(OrderHistoryDirective) headers: QueryList<OrderHistoryDirective>;
-
-  constructor(public service: OrderHistoryService) {
-    this.orders$ = service.orders$;
-    this.total$ = service.total$;
-  }
-
-  onSort({column, direction}: SortEvent) {
-    // resetting other headers
-    this.headers.forEach(header => {
-      if (header.sortable !== column) {
-        header.direction = '';
-      }
-    });
-
-    this.service.sortColumn = column;
-    this.service.sortDirection = direction;
-  }
   ngOnInit(): void {
+    this.fetchEquipements();
   }
 
+  fetchEquipements() {
+    this.apiService.getEquipements().subscribe(data => {
+      this.equipements = data;
+      this.equipements.forEach(equipement => {
+        this.apiService.getTicketsByEquipementId(equipement.id).subscribe(tickets => {
+          equipement.tickets = tickets;
+        });
+      });
+    });
+  }
+
+  updateEquipement(equipement: any) {
+    this.apiService.updateEquipement(equipement.id, { nom: equipement.nom }).subscribe(() => {
+      alert('Équipement mis à jour avec succès');
+    });
+  }
+
+  updateTicket(ticket: any) {
+    this.ticketService.updateTicket(ticket.id, { titre: ticket.titre }).subscribe(() => {
+      alert('Ticket mis à jour avec succès');
+    });
+  }
+
+  deleteTicket(ticketId: number) {
+    this.ticketService.deleteTicket(ticketId).subscribe(() => {
+      this.fetchEquipements();
+    });
+  }
+
+  addAlert(equipementId: number) {
+    const description = this.newAlert[equipementId];
+    if (description) {
+      this.alertService.addAlertToEquipement(equipementId, { description }).subscribe(() => {
+        alert('Alerte ajoutée');
+        this.newAlert[equipementId] = '';
+      });
+    }
+  }
 }

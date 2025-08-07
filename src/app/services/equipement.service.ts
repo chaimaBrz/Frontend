@@ -8,9 +8,14 @@ import { Observable } from 'rxjs';
 export class EquipementService {
   private apiUrl = 'http://127.0.0.1:8000/api/equipements';
 
+
   constructor(private http: HttpClient) { }
 
   getAll(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }
+  createEquipement(data: any): Observable<any> {
+  return this.http.post(this.apiUrl, data);
+}
+
 }

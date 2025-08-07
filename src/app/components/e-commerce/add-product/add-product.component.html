@@ -1,11 +1,25 @@
-<app-breadcrumb [title]="'Add Product'" [items]="['E-Commerce']" [active_item]="'Add Product'"></app-breadcrumb>
-<div class="container-fluid add-product">
-    <div class="row">
-        <div class="col-xl-6">
-            <app-description-category></app-description-category>
-        </div>
-        <div class="col-xl-6">
-           <app-size-image></app-size-image>
-        </div>
-    </div>
-</div>
+<app-breadcrumb [title]="'Ajouter un Équipement'" [items]="['Équipements']" [active_item]="'Ajouter'"></app-breadcrumb>
+
+<form [formGroup]="equipementForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label>Nom</label>
+    <input formControlName="nom" type="text">
+  </div>
+  <div>
+    <label>État</label>
+    <input formControlName="etat" type="number">
+  </div>
+  <div>
+    <label>Date d'installation</label>
+    <input formControlName="date_installation" type="date">
+  </div>
+  <div>
+    <label>Type ID</label>
+    <input formControlName="type_id" type="number">
+  </div>
+  <div>
+    <label>Fournisseur ID</label>
+    <input formControlName="fournisseur_id" type="number">
+  </div>
+  <button type="submit" class="btn btn-primary">Ajouter Équipement</button>
+</form>

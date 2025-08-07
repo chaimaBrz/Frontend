@@ -20,6 +20,7 @@ const routes: Routes = [
   { path: 'equipements', component: EquipementsComponent, canActivate: [AuthGuard] },
   { path: 'tickets', component: TicketsComponent, canActivate: [AuthGuard] },
   { path: 'logs', component: LogsComponent, canActivate: [AuthGuard] },
+  
 
   // ⛔ Redirection par défaut vers login
   { path: '', redirectTo: '/auth/login', pathMatch: 'full' },

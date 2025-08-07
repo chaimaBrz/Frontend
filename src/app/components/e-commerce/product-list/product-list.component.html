@@ -24,21 +24,66 @@
                    <th class="sorting_asc" scope="col" sortable="stock" (sort)="onSort($event)">Stock</th>
                    <th class="sorting_asc" scope="col" sortable="startData" (sort)="onSort($event)">Start date</th> -->
                     <th class="sorting_asc" scope="col">Alerte</th>
+                    <th class="sorting_asc" scope="col">Actions</th>
+
                   </tr>
                 </thead>
                 <tbody>
-                  @for (item of list; track $index) {
-                  <tr class="odd">
-                    <td class="sorting_1">{{item.id}}</td>
-                    <td class="sorting_1">{{item.nom}}</td>
-                    <td class="sorting_1">{{item.etat}}</td>
-                    <td class="sorting_1">{{item.date_installation}}</td>
-                    <td class="sorting_1">{{item.type_nom}}</td>
-                    <td class="sorting_1">{{item.fournisseur_id}}</td>
-                    <td class="sorting_1">{{item.alerts}}</td>
-                  </tr>
-                  }
-                </tbody>
+  @for (item of list; track $index) {
+  <tr class="odd">
+    <td class="sorting_1">{{item.id}}</td>
+    <td class="sorting_1">{{item.nom}}</td>
+    <td class="sorting_1">{{item.etat}}</td>
+    <td class="sorting_1">{{item.date_installation}}</td>
+    <td class="sorting_1">{{item.type_nom}}</td>
+    <td class="sorting_1">{{item.fournisseur_id}}</td>
+    <td class="sorting_1">
+  <ul *ngIf="item.alerts && item.alerts.length > 0">
+    @for (alert of item.alerts; track alert.id) {
+  <li>{{alert.titre}}</li>
+}
+
+  </ul>
+  <span *ngIf="!item.alerts || item.alerts.length === 0">Aucune</span>
+</td>
+
+    <!-- Nouvelle colonne Actions -->
+    <td>
+      <button class="btn btn-primary btn-sm" (click)="toggleHistorique(item)">
+  Voir Historique
+</button>
+
+    </td>
+  </tr>
+
+  <!-- Ligne des historiques (affichée si showHistorique = true) -->
+  <tr *ngIf="item.showHistorique">
+    <td colspan="8">
+      <div *ngIf="item.evenements; else loading">
+        <ul>
+          @for (event of item.evenements; track event.id) {
+  <li>
+    {{event.date}} - {{event.description}} ({{event.type}})
+    <div *ngIf="event.ticket_description">
+      <small>Ticket : {{event.ticket_description}}</small>
+    </div>
+  </li>
+}
+
+
+        </ul>
+        <div *ngIf="item.evenements.length === 0">
+          Aucun historique trouvé.
+        </div>
+      </div>
+      <ng-template #loading>
+        <div>Chargement de l'historique...</div>
+      </ng-template>
+    </td>
+  </tr>
+  }
+</tbody>
+
               </table>
           </div>
         </div>

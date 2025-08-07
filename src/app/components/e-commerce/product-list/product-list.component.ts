@@ -7,22 +7,52 @@ import { ProductListService } from '../../../shared/services/product/product-lis
 import { ApiService } from '../../../services/api.service';
 
 @Component({
-    selector: 'app-product-list',
-    templateUrl: './product-list.component.html',
-    styleUrls: ['./product-list.component.scss'],
-    imports: [BreadcrumbComponent, FormsModule, CommonModule, NgbPagination, AsyncPipe],
-    providers: [DecimalPipe, ProductListService]
+  selector: 'app-product-list',
+  templateUrl: './product-list.component.html',
+  styleUrls: ['./product-list.component.scss'],
+  imports: [BreadcrumbComponent, FormsModule, CommonModule, NgbPagination, AsyncPipe],
+  providers: [DecimalPipe, ProductListService]
 })
-
 export class ProductListComponent {
- list: any[] = [];
+  list: any[] = [];
+
   constructor(private apiService: ApiService) {}
+
   ngOnInit() {
     this.getAllPosts();
   }
+
   getAllPosts() {
     this.apiService.getEquipements().subscribe(data => {
       this.list = data;
     });
   }
+
+  toggleHistorique(item: any) {
+    if (item.showHistorique) {
+      item.showHistorique = false;
+      return;
+    }
+
+    if (item.evenements) {
+      item.showHistorique = true;
+      return;
+    }
+
+    this.apiService.getEvenementsByEquipementId(item.id).subscribe((data: any) => {
+  item.evenements = data.evenements;
+  item.showHistorique = true;
+});
+
+  }
+  refreshEquipementHistorique(equipementId: number) {
+  const equipement = this.list.find(e => e.id === equipementId);
+  if (equipement) {
+    this.apiService.getEvenementsByEquipementId(equipementId).subscribe((data: any) => {
+      equipement.evenements = data.evenements;
+      equipement.showHistorique = true; // On le garde ouvert
+    });
+  }
+}
+
 }
